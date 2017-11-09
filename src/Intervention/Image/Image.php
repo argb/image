@@ -136,7 +136,12 @@ class Image extends File
             );
         }
 
-        $data = $this->encode(pathinfo($path, PATHINFO_EXTENSION), $quality);
+        $pathInfo = pathinfo($path);
+        $data = $this->encode($pathInfo['extension'], $quality);
+
+        if(!file_exists($pathInfo['dirname'])){
+            mkdir($pathInfo['dirname'], 0777, true);
+        }
         $saved = @file_put_contents($path, $data);
 
         if ($saved === false) {
